@@ -1,0 +1,28 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  h2 {
+    margin-top: 20px;
+  }
+  
+  table {
+    margin-top: 20px;
+  }
+  
+  th, td {
+    text-align: center;
+  }
+  
+  button {
+    margin: 5px;
+  }
+  
