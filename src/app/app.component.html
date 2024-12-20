@@ -1,20 +1,71 @@
-<div class="container">
-  <h1>Store Management System</h1>
+<div class="Store">
+  <h1>Simple Store Management</h1>
 
-  <h2>Add Item</h2>
-  <form (ngSubmit)="addItem(itemId.value, quantity.value)">
+  <table>
+      <thead>
+          <tr>
+              <th>Item ID</th>
+              <th>Item Name</th>
+              <th>Price (Rs.)</th>
+              <th>Discount</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr class="item-row">
+              <td>5001</td>
+              <td>Item 5001</td>
+              <td>20</td>
+              <td>No Discount</td>
+          </tr>
+          <tr class="item-row">
+              <td>5002</td>
+              <td>Item 5002</td>
+              <td>25</td>
+              <td>No Discount</td>
+          </tr>
+          <tr class="item-row">
+              <td>5003</td>
+              <td>Item 5003</td>
+              <td>30</td>
+              <td>No Discount</td>
+
+          </tr>
+          <tr class="item-row">
+              <td>5004</td>
+              <td>Item 5004</td>
+              <td>40</td>
+              <td>20% Off</td>
+
+          </tr>
+          <tr class="item-row">
+              <td>5005</td>
+              <td>Item 5005</td>
+              <td>50</td>
+              <td>20% Off</td>
+          </tr>
+      </tbody>
+  </table>
+
+   
+  <form (ngSubmit)="addItemToCart()">
     <div class="form-group">
-      <label for="item">Item ID:</label>
-      <select #itemId class="form-control" required>
-        <option *ngFor="let item of allItems" [value]="item.id">{{ item.name }} - Rs.{{ item.price }}</option>
+      <label for="itemId">Item ID:</label>
+      <select [(ngModel)]="selectedItemId" name="itemId" class="form-control" required>
+        <option value="" disabled>Select Item</option>
+        <option *ngFor="let item of allItems" [value]="item.id">
+          {{ item.name }} - Rs.{{ item.price }}
+        </option>
       </select>
     </div>
+
     <div class="form-group">
       <label for="quantity">Quantity:</label>
-      <input #quantity type="number" class="form-control" min="1" required>
+      <input [(ngModel)]="quantity" type="number" name="quantity" class="form-control" min="1" required>
     </div>
-    <button type="submit" class="btn btn-primary">Add to Cart</button>
+
+    <button type="submit" class="addItemToCart">Add to Cart</button>
   </form>
+
 
   <h2>Cart</h2>
   <table class="table table-bordered">
@@ -24,23 +75,23 @@
         <th>Quantity</th>
         <th>Price</th>
         <th>Total</th>
-        <th>Action</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of items">
+      <tr *ngFor="let item of cart">
         <td>{{ item.name }}</td>
         <td>{{ item.quantity }}</td>
         <td>Rs.{{ item.price }}</td>
-        <td>Rs.{{ item.price * item.quantity }}</td>
-        <td>
-          <button class="btn btn-danger" (click)="removeItem(item.id)">Remove</button>
-        </td>
+        <td>Rs.{{ item.total }}</td>
       </tr>
+      
     </tbody>
   </table>
 
-  <h3>Total Bill: Rs.{{ totalBill }}</h3>
+  
 
-  <button class="btn btn-warning" (click)="resetCart()">Reset Cart</button>
+  
+
+  
+  <h3 *ngIf="totalAmount > 0">Total Amount: Rs. {{ totalAmount }}</h3>
 </div>

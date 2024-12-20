@@ -6,10 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  // List of items in the cart
-  items: { id: number, name: string, price: number, quantity: number }[] = [];
-  
-  // Item data (hardcoded for simplicity)
+
   allItems = [
     { id: 5001, name: 'Item 5001', price: 20 },
     { id: 5002, name: 'Item 5002', price: 25 },
@@ -18,35 +15,47 @@ export class AppComponent {
     { id: 5005, name: 'Item 5005', price: 50 }
   ];
 
-  // To store the total bill
-  totalBill = 0;
+  selectedItemId: number = 5001; // This keeps track of the selected item id
+  quantity: number = 1; // Quantity of the selected item
+  cart: any[] = []; // The shopping cart
+  totalAmount: number = 0; // Total amount for all items in the cart
 
-  // Add item to the cart
-  addItem(itemId: number, quantity: number) {
-    const selectedItem = this.allItems.find(item => item.id === itemId);
-    if (selectedItem && quantity > 0) {
-      this.items.push({ ...selectedItem, quantity });
+  addItemToCart() {
+    // Find the selected item from the allItems array based on the selectedItemId
+    const selectedItem = this.allItems.find(item => item.id === this.selectedItemId);
+    
+    // Check if the item is found and if quantity is greater than 0
+    if (selectedItem && this.quantity > 0) {
+      // Create an object representing the item being added to the cart
+      const itemInCart = {
+        name: selectedItem.name,
+        price: selectedItem.price,
+        quantity: this.quantity,
+        total: selectedItem.price * this.quantity
+      };
+
+      // Check if the item already exists in the cart
+      const existingItemIndex = this.cart.findIndex(item => item.id === selectedItem.id);
+      
+      if (existingItemIndex !== -1) {
+        // If the item already exists in the cart, update its quantity and total
+        this.cart[existingItemIndex].quantity += this.quantity;
+        this.cart[existingItemIndex].total = this.cart[existingItemIndex].price * this.cart[existingItemIndex].quantity;
+      } else {
+        // If the item is not already in the cart, add it to the cart
+        this.cart.push({ ...itemInCart, id: selectedItem.id });
+      }
+
+      // Recalculate the total amount in the cart
       this.calculateTotal();
     }
+
+    // Reset quantity after adding the item
+    this.quantity = 1;
   }
 
-  // Calculate the total bill
   calculateTotal() {
-    this.totalBill = 0;
-    this.items.forEach(item => {
-      this.totalBill += item.price * item.quantity;
-    });
-  }
-
-  // Remove item from the cart
-  removeItem(itemId: number) {
-    this.items = this.items.filter(item => item.id !== itemId);
-    this.calculateTotal();
-  }
-
-  // Reset the cart
-  resetCart() {
-    this.items = [];
-    this.totalBill = 0;
+    // Calculate the total amount by summing up the total prices of each item in the cart
+    this.totalAmount = this.cart.reduce((sum, item) => sum + item.total, 0);
   }
 }
